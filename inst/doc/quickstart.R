@@ -5,7 +5,7 @@ knitr::opts_chunk$set(
 )
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  devtools::install_github("rfsaldanha/tidyrates")
+# devtools::install_github("rfsaldanha/tidyrates")
 
 ## -----------------------------------------------------------------------------
 library(tidyrates)

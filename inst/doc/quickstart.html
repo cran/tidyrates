@@ -49,7 +49,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,7 +60,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -344,11 +344,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 reference population or other rate. This is a very common procedure in
 epidemiology, allowing the comparison of rates of a event (like
 mortality) among groups that have different age distributions.</p>
-<p>Some packages like the <code>epitools</code> compute these adjusted
-rates. This package functions wraps the <code>epitools</code> functions
-in a tidy way, allowing the computation of age adjusted rates for
-several groups using key variables, like year and regions for
-example.</p>
+<p>The package computes age-adjusted rates internally in a tidy way,
+allowing computation for several groups using key variables, such as
+year and region. Direct rates use 95% Fay-Feuer gamma confidence
+intervals; indirect rates retain the 95% log-normal intervals used in
+earlier versions.</p>
 <div id="setup" class="section level2">
 <h2>Setup</h2>
 <div id="installing-the-package" class="section level3">
@@ -494,7 +494,7 @@ argument must be a tibble with the events and population data, and the
 <code>.keys</code> argument must point to grouping variables on the
 <code>.data</code> tibble, if available.</p>
 <p>The <code>rate_adj_direct</code> will compute the crude rate,
-adjusted rate and exact confidence intervals for each group.</p>
+adjusted rate and confidence intervals for each group.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">rate_adj_direct</span>(fleiss_data, <span class="at">.std =</span> standard_pop, <span class="at">.keys =</span> <span class="st">&quot;key&quot;</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 5 × 5</span></span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt;   key    crude.rate adj.rate      lci      uci</span></span>
@@ -570,12 +570,15 @@ tibble with the events and population data. The <code>.keys</code>
 argument must point to grouping variables on the <code>.data</code>
 tibble, if available.</p>
 <p>The <code>rate_adj_indirect</code> will compute the crude rate,
-adjusted rate and exact confidence intervals for each group.</p>
+adjusted rate and confidence intervals for each group. Reference
+age-specific rates and the reference crude rate are computed from
+<code>.std</code>. Supply its age groups in the same row order as in
+each group of <code>.data</code>.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">rate_adj_indirect</span>(selvin_data_1940, selvin_data_1960)</span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 4</span></span>
 <span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt;   crude.rate adj.rate     lci     uci</span></span>
 <span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt;        &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; 1    0.00120  0.00120 0.00119 0.00120</span></span></code></pre></div>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; 1    0.00120  0.00138 0.00137 0.00139</span></span></code></pre></div>
 </div>
 </div>
 
